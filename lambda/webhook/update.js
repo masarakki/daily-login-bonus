@@ -1,4 +1,6 @@
 var config = require("./config");
+var mtu = require("../mtu");
+var request = require("request-promise");
 
 var query = function(token) {
   var now = new Date();
@@ -41,16 +43,33 @@ var withRecord = function(token, context, callback) {
   });
 };
 
+var post = function(webhook, illust) {
+  var url = "http://seiga.nicovideo.jp/image/source/" + illust.slice(2);
+  return request({
+    url: "https://slack.com/api/chat.postMessage",
+    method: "POST",
+    form: {
+      token: webhook.access_token,
+      channel: webhook.channel_id,
+      text: url ,
+      unfurl_links: true,
+      unfurl_media: true
+    }
+  });
+};
+
 var update = function(event, context) {
   var token = event.token;
   withRecord(token, context, function(err, data) {
     if (data.Item.logined_at && isToday(new Date(data.Item.logined_at))) {
       context.succeed({status: 'conflict'});
     } else {
-      config.dynamo.updateItem(query(token), function() {
-        context.succeed({status: 'success'});
+      mtu().then(this.post(data, illust)).then(() => {
+        config.dynamo.updateItem(query(token), function() {
+          context.succeed({status: 'success'});
+        });
       });
-    }
+    };
   });
 };
 
