@@ -18,7 +18,10 @@ class Channels extends React.Component {
   }
   render() {
     if (this.props.channels.length == 0) {
-      return <div></div>;
+      return <div>
+        <h2>Create new Webhook</h2>
+        <div>Loading...</div>
+        </div>;
     }
     var channels = _.map(this.props.channels, (channel) => {
       return <option key={channel.id} value={channel.id}>#{channel.name}</option>;

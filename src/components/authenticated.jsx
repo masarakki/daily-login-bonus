@@ -6,6 +6,26 @@ var Channels = require("./channels.jsx");
 var Webhooks = require("./webhooks.jsx");
 var config = require("../config");
 
+var Usage = class Usage extends React.Component {
+  render() {
+    var json = JSON.stringify({"message": "today's bonus!", "name": "dailyloginbonus"});
+    var url = "{your_webhook_url}";
+    var styles = {
+      textAlign: "left"
+    };
+    return <div>
+      <h2>Usage</h2>
+      <div style={styles}>
+      <code>PUT {url}</code>
+      <br />
+      <code>
+      {json}
+    </code>
+      </div>
+      </div>;
+  }
+}
+
 class Authenticated extends React.Component {
   constructor() {
     super();
@@ -89,6 +109,7 @@ class Authenticated extends React.Component {
     return <div>
       <Webhooks webhooks={this.state.webhooks} />
       <Channels channels={this.state.channels} />
+      <Usage />
       </div>;
   }
 }

@@ -2,7 +2,9 @@
     "name": "lambda",
     "version": "0.0.1",
     "dependencies": {
-        "request": "*"
+        "request-promise": "*",
+        "bluebird": "*",
+        "underscore": "*"
     },
     "devDependencies": {
         "dynamodb-doc": "*"

@@ -1,6 +1,7 @@
 var config = require("./config");
-var mtu = require("../mtu");
+var mtu = require("./mtu");
 var request = require("request-promise");
+var _ = require("underscore");
 
 var query = function(token) {
   var now = new Date();
@@ -43,15 +44,20 @@ var withRecord = function(token, context, callback) {
   });
 };
 
-var post = function(webhook, illust) {
-  var url = "http://seiga.nicovideo.jp/image/source/" + illust.slice(2);
+var post = function(params, webhook, illust) {
+  var name = params.name;
+  var message = params.message;
+  var url = "http://lohas.nicoseiga.jp/thumb/" + illust.slice(2) + "l";
+  var text = _.compact([message, url]).join(" ");
+
   return request({
     url: "https://slack.com/api/chat.postMessage",
     method: "POST",
     form: {
       token: webhook.access_token,
       channel: webhook.channel_id,
-      text: url ,
+      text: text,
+      username: name,
       unfurl_links: true,
       unfurl_media: true
     }
@@ -61,16 +67,20 @@ var post = function(webhook, illust) {
 var update = function(event, context) {
   var token = event.token;
   withRecord(token, context, function(err, data) {
-    if (data.Item.logined_at && isToday(new Date(data.Item.logined_at))) {
+    webhook = data.Item;
+    if (webhook.logined_at && isToday(new Date(webhook.logined_at))) {
       context.succeed({status: 'conflict'});
     } else {
-      mtu().then(this.post(data, illust)).then(() => {
+      mtu().then(function(illust) {
+        return post(event, webhook, illust);
+      }).then(function() {
         config.dynamo.updateItem(query(token), function() {
           context.succeed({status: 'success'});
         });
       });
-    };
+    }
   });
 };
+
 
 module.exports = update;
