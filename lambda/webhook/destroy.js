@@ -10,9 +10,7 @@ var query = function(token) {
 
 var destroy = function(event, context) {
   var token = event.token;
-  config.dynamo.deleteItem(query(token), function() {
-    context.done({status: 'success'});
-  });
+  config.dynamo.deleteItem(query(token), context.done);
 };
 
 module.exports = destroy;

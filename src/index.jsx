@@ -5,6 +5,7 @@ var qs = require("query-string");
 
 $(document).ready(function() {
   var query = qs.parse(window.location.search);
+  window.history.replaceState({}, "", "/");
   var target = document.getElementById("react");
   var Main = require("./components/main.jsx");
   var Inner;

@@ -16,7 +16,7 @@ class Main extends React.Component {
     var View = this.props.inner;
     return <div style={boxStyles}>
       <h1 style={titleStyles}>Daily Login Bonus</h1>
-      <View {...this.props.query} />
+      <View {...this.props.params} />
       </div>;
   }
 }

@@ -5,10 +5,12 @@
         "query-string": "*",
         "jquery": "*",
         "request": "*",
+        "request-promise": "*",
         "client-oauth2": "*",
         "bluebird": "*",
         "react": "*",
-        "react-dom": "*"
+        "react-dom": "*",
+        "underscore": "*"
     },
     "devDependencies": {
         "grunt": "*",
