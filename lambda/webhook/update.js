@@ -1,5 +1,5 @@
 var config = require("./config");
-var mtu = require("./mtu");
+var mtu = require("../mtu");
 var request = require("request-promise");
 var _ = require("underscore");
 
@@ -47,7 +47,7 @@ var withRecord = function(token, context, callback) {
 var post = function(params, webhook, illust) {
   var name = params.name;
   var message = params.message;
-  var url = "http://lohas.nicoseiga.jp/thumb/" + illust.slice(2) + "l";
+  var url = "http://seiga.nicovideo.jp/seiga/" + illust;
   var text = _.compact([message, url]).join(" ");
 
   return request({
