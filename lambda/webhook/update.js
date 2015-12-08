@@ -49,6 +49,7 @@ var post = function(params, webhook, illust) {
   var message = params.message;
   var url = "http://seiga.nicovideo.jp/seiga/" + illust;
   var text = _.compact([message, url]).join(" ");
+  var icon = params.icon;
 
   return request({
     url: "https://slack.com/api/chat.postMessage",
@@ -58,6 +59,7 @@ var post = function(params, webhook, illust) {
       channel: webhook.channel_id,
       text: text,
       username: name,
+      icon_emoji: icon,
       unfurl_links: true,
       unfurl_media: true
     }
