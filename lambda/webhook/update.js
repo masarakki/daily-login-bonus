@@ -24,12 +24,17 @@ var query = function(token) {
 var beginningOfToday = function() {
   var now = new Date();
   // a day is start at 06:00 JST
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 19, 0, 0);
+  var date = now.getUTCDate();
+  if (now.getUTCHours() < 21) {
+    date = date - 1;
+  }
+  return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), date,
+                  21, 0, 0);
 };
 
 var isToday = function(logined) {
   var beginning = beginningOfToday();
-  return logined.getTime() > beginningOfToday().getTime();
+  return logined.getTime() > beginningOfToday();
 };
 
 var withRecord = function(token, context, callback) {
